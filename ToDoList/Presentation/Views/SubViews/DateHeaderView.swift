@@ -8,15 +8,14 @@
 import SwiftUI
 
 struct DateHeaderView: View {
-    
-    @EnvironmentObject var dateManager: DateManager
+    @ObservedObject var viewModel: TasksHomePageViewModel
     
     var body: some View {
         ZStack {
             VStack {
                 nameHeaderTextView()
-                DateSliderView { week in
-                    DateView(week: week)
+                DateSliderView(viewModel: viewModel) { week in
+                    DateView(viewModel: viewModel, week: week)
                 }
                 .frame(height: 60, alignment: .top)
                 Divider()
@@ -35,7 +34,7 @@ struct DateHeaderView: View {
                     .foregroundColor(.black)
                     .padding(4)
                 
-                Text(dateManager.selectedDate == Calendar.current.startOfDay(for: Date()) ?  "What's up for today" : "Planing for future?")
+                Text(viewModel.selectedDate == Calendar.current.startOfDay(for: Date()) ?  "What's up for today" : "Planing for future?")
                     .font(.caption)
                     .fontWeight(.light)
                     .foregroundColor(.black)
@@ -43,13 +42,13 @@ struct DateHeaderView: View {
             }
             Spacer()
             VStack(alignment: .trailing){
-                Text(dateManager.selectedDate.monthToString())
+                Text(viewModel.selectedDate.monthToString())
                     .font(.system(size: 10, weight: .heavy))
                     .foregroundColor(.black)
                 
                 Button {
                     withAnimation(.linear(duration: 0.1)) {
-                        dateManager.selectToday()
+                        viewModel.selectTheDay(with: Date())
                     }
                 } label: {
                     Text("Today")
@@ -66,6 +65,5 @@ struct DateHeaderView: View {
 }
 
 #Preview {
-    DateHeaderView()
-        .environmentObject(DateManager())
+    DateHeaderView(viewModel: TasksHomePageViewModel(dateUseCase: DateUseCase(dateRepository: DateRepository(dateDataProvider: DateDataProvider())), taskUseCase: TaskUseCase(taskRepository: TaskRepository(taskDataProvider: TaskDataProvider()))))
 }

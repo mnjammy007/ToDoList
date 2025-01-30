@@ -9,8 +9,9 @@ import SwiftUI
 
 struct TaskListItem: View {
     
-    @EnvironmentObject var items: TaskListManager
     var task: Task
+    var onPress: (Task) -> ()
+    var onLongPress: (Task) -> ()
     
     var deleteAlert: Alert{
         Alert(title: Text("Hey!"), message: Text("Are you sure you want to delete this task?"), primaryButton: .destructive(Text("Delete"), action: deleteTask), secondaryButton: .cancel())
@@ -40,7 +41,7 @@ struct TaskListItem: View {
             Spacer()
         }.onTapGesture {
             withAnimation {
-                items.toggleTaskCompletion(task: task)
+                toggleTaskCompletion()
             }
         }
         .onLongPressGesture {
@@ -51,13 +52,14 @@ struct TaskListItem: View {
         }
     }
     
+    private func toggleTaskCompletion(){
+        onPress(task)
+    }
     private func deleteTask(){
-        items.deleteTask(task: task)
+        onLongPress(task)
     }
 }
 
 #Preview {
-    ContentView()
-        .environmentObject(DateManager())
-        .environmentObject(TaskListManager())
+    TasksHomePage(viewModel: TasksHomePageViewModel(dateUseCase: DateUseCase(dateRepository: DateRepository(dateDataProvider: DateDataProvider())), taskUseCase: TaskUseCase(taskRepository: TaskRepository(taskDataProvider: TaskDataProvider()))))
 }

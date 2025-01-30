@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct DateView: View {
-    
-    @EnvironmentObject var weekManager: DateManager
+    @ObservedObject var viewModel: TasksHomePageViewModel
     var week: WeekModel
     
     var body: some View {
@@ -35,7 +34,7 @@ struct DateView: View {
                 .clipShape(.rect(cornerRadius: 10))
                 .onTapGesture {
                     withAnimation(.linear(duration: 0.1)) {
-                        weekManager.selectedDate = week.dates[dayIndex]
+                        viewModel.selectTheDay(with: week.dates[dayIndex])
                     }
                 }
             }
@@ -44,8 +43,10 @@ struct DateView: View {
 }
 
 #Preview {
+    let viewModel = TasksHomePageViewModel(dateUseCase: DateUseCase(dateRepository: DateRepository(dateDataProvider: DateDataProvider())), taskUseCase: TaskUseCase(taskRepository: TaskRepository(taskDataProvider: TaskDataProvider())))
+    
     DateView(
-        week: .init(index: 1, dates: [
+        viewModel: viewModel, week: .init(index: 1, dates: [
             Date().yesterday.yesterday.yesterday,
             Date().yesterday.yesterday,
             Date().yesterday,
@@ -55,5 +56,4 @@ struct DateView: View {
             Date().tomorrow.tomorrow.tomorrow,
         ], referenceDate: Date())
     )
-    .environmentObject(DateManager())
 }

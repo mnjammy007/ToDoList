@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct DateSliderView<DateViewContent: View>: View {
-    
-    @EnvironmentObject var weekManager: DateManager
+    @ObservedObject var viewModel: TasksHomePageViewModel
     @State private var activeTab:Int = 1
     @State private var position = CGSize.zero
     @GestureState private var dragOffset = CGSize.zero
@@ -17,27 +16,28 @@ struct DateSliderView<DateViewContent: View>: View {
     
     let dateViewContent: (_ week: WeekModel) -> DateViewContent
     
-    init(@ViewBuilder dateViewContent: @escaping (_ week: WeekModel) -> DateViewContent) {
+    init(viewModel: TasksHomePageViewModel, @ViewBuilder dateViewContent: @escaping (_ week: WeekModel) -> DateViewContent) {
+        self.viewModel = viewModel
         self.dateViewContent = dateViewContent
     }
     
     var body: some View {
         TabView(selection: $activeTab) {
-            dateViewContent(weekManager.weeks[0])
+            dateViewContent(viewModel.weeks[0])
                 .frame(maxWidth: .infinity)
                 .tag(0)
             
-            dateViewContent(weekManager.weeks[1])
+            dateViewContent(viewModel.weeks[1])
                 .frame(maxWidth: .infinity)
                 .tag(1)
                 .onDisappear {
                     guard direction != .unknown else {return}
-                    weekManager.update(to: direction)
+                    viewModel.onDateScrolled(to: direction)
                     direction = .unknown
                     activeTab = 1
                 }
             
-            dateViewContent(weekManager.weeks[2])
+            dateViewContent(viewModel.weeks[2])
                 .frame(maxWidth: .infinity)
                 .tag(2)
         }
@@ -53,7 +53,9 @@ struct DateSliderView<DateViewContent: View>: View {
 }
 
 #Preview {
-    DateSliderView(){week in
-        DateView(week: week)
-    }.environmentObject(DateManager())
+    let viewModel = TasksHomePageViewModel(dateUseCase: DateUseCase(dateRepository: DateRepository(dateDataProvider: DateDataProvider())), taskUseCase: TaskUseCase(taskRepository: TaskRepository(taskDataProvider: TaskDataProvider())))
+    
+    DateSliderView(viewModel: viewModel){week in
+        DateView(viewModel: viewModel,week: week)
+    }
 }

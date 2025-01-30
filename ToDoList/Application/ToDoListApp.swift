@@ -10,14 +10,11 @@ import SwiftUI
 @main
 struct ToDoListApp: App {
     
-    @StateObject var dateManager: DateManager = DateManager()
-    @StateObject var taskListManager: TaskListManager = TaskListManager()
+    @StateObject var viewModel: TasksHomePageViewModel = TasksHomePageViewModel(dateUseCase: DateUseCase(dateRepository: DateRepository(dateDataProvider: DateDataProvider())), taskUseCase: TaskUseCase(taskRepository: TaskRepository(taskDataProvider: TaskDataProvider())))
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environmentObject(dateManager)
-                .environmentObject(taskListManager)
+            TasksHomePage(viewModel: viewModel)
         }
     }
 }
