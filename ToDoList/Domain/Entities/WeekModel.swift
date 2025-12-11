@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeekModel{
+struct WeekModel {
     let index: Int
     let dates: [Date]
     var referenceDate: Date

@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol TaskUseCaseProtocol{
+protocol TaskUseCaseProtocol {
     func getTaskList() -> [Task]
     func updateTaskList(task: Task) -> [Task]
     func toggleTaskCompletion(task: Task) -> [Task]
@@ -15,30 +15,30 @@ protocol TaskUseCaseProtocol{
     func getCurrentDateSelectedTasks(of date: Date) -> [Task]
 }
 
-class TaskUseCase{
+class TaskUseCase {
     private let taskRepository: TaskRepositoryProtocol
     init(taskRepository: TaskRepositoryProtocol) {
         self.taskRepository = taskRepository
     }
 }
 
-extension TaskUseCase: TaskUseCaseProtocol{
+extension TaskUseCase: TaskUseCaseProtocol {
     func getTaskList() -> [Task] {
         taskRepository.getTaskList()
     }
-    
+
     func updateTaskList(task: Task) -> [Task] {
         taskRepository.updateTaskList(task: task)
     }
-    
+
     func toggleTaskCompletion(task: Task) -> [Task] {
         taskRepository.toggleTaskCompletion(task: task)
     }
-    
+
     func deleteTask(task: Task) -> [Task] {
         taskRepository.deleteTask(task: task)
     }
-    
+
     func getCurrentDateSelectedTasks(of date: Date) -> [Task] {
         taskRepository.getCurrentDateSelectedTasks(of: date)
     }

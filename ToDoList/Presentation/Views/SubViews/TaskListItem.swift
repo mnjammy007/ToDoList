@@ -8,26 +8,39 @@
 import SwiftUI
 
 struct TaskListItem: View {
-    
+
     var task: Task
-    var onPress: (Task) -> ()
-    var onLongPress: (Task) -> ()
-    
-    var deleteAlert: Alert{
-        Alert(title: Text("Hey!"), message: Text("Are you sure you want to delete this task?"), primaryButton: .destructive(Text("Delete"), action: deleteTask), secondaryButton: .cancel())
+    var onPress: (Task) -> Void
+    var onLongPress: (Task) -> Void
+
+    var deleteAlert: Alert {
+        Alert(
+            title: Text("Delete Task"),
+            message: Text("Are you sure you want to delete this task?"),
+            primaryButton: .destructive(Text("Delete"), action: deleteTask),
+            secondaryButton: .cancel()
+        )
     }
-    
+
     @State var showDeleteAlert = false
-    
+
     var body: some View {
-        HStack{
+        HStack {
             Circle()
                 .fill(.gray.opacity(0.1))
                 .frame(width: 25, height: 25)
-                .background(.white.shadow(.drop(color: .black.opacity(0.1), radius: 3)), in: .circle)
+                .background(
+                    .secondary.shadow(
+                        .drop(color: .primary.opacity(0.1), radius: 3)
+                    ),
+                    in: .circle
+                )
                 .overlay {
                     Circle()
-                        .fill(task.isCompleted ? .green.opacity(0.4) : .blue.opacity(0.4))
+                        .fill(
+                            task.isCompleted
+                                ? .green.opacity(0.4) : .blue.opacity(0.4)
+                        )
                         .frame(width: 20, height: 20)
                         .shadow(radius: 1)
                 }
@@ -36,7 +49,9 @@ struct TaskListItem: View {
                     .font(.system(size: 15, weight: .light))
             }
             .padding()
-            .background(task.isCompleted ? .green.opacity(0.4) : .blue.opacity(0.4))
+            .background(
+                task.isCompleted ? .green.opacity(0.4) : .blue.opacity(0.4)
+            )
             .clipShape(.rect(cornerRadius: 10))
             Spacer()
         }.onTapGesture {
@@ -51,15 +66,28 @@ struct TaskListItem: View {
             deleteAlert
         }
     }
-    
-    private func toggleTaskCompletion(){
+
+    private func toggleTaskCompletion() {
         onPress(task)
     }
-    private func deleteTask(){
+    private func deleteTask() {
         onLongPress(task)
     }
 }
 
 #Preview {
-    TasksHomePage(viewModel: TasksHomePageViewModel(dateUseCase: DateUseCase(dateRepository: DateRepository(dateDataProvider: DateDataProvider())), taskUseCase: TaskUseCase(taskRepository: TaskRepository(taskDataProvider: TaskDataProvider()))))
+    TasksHomePage(
+        viewModel: TasksHomePageViewModel(
+            dateUseCase: DateUseCase(
+                dateRepository: DateRepository(
+                    dateDataProvider: DateDataProvider()
+                )
+            ),
+            taskUseCase: TaskUseCase(
+                taskRepository: TaskRepository(
+                    taskDataProvider: TaskDataProvider()
+                )
+            )
+        )
+    )
 }

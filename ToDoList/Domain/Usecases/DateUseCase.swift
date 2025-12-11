@@ -7,18 +7,18 @@
 
 import Foundation
 
-protocol DateUseCaseProtocol{
+protocol DateUseCaseProtocol {
     func calculatePastAndFutureWeeks(with date: Date) -> [WeekModel]
 }
 
-class DateUseCase{
-    private let dateRepository : DateRepositoryProtocol
+class DateUseCase {
+    private let dateRepository: DateRepositoryProtocol
     init(dateRepository: DateRepositoryProtocol) {
         self.dateRepository = dateRepository
     }
 }
 
-extension DateUseCase: DateUseCaseProtocol{
+extension DateUseCase: DateUseCaseProtocol {
     func calculatePastAndFutureWeeks(with date: Date) -> [WeekModel] {
         dateRepository.calculatePastAndFutureWeeks(with: date)
     }
