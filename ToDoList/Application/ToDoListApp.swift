@@ -22,7 +22,7 @@ struct ToDoListApp: App {
 
     init() {
         AppsFlyerLib.shared().appsFlyerDevKey = "vEbzV4hdsUG5GpQYLeXsHS"
-        AppsFlyerLib.shared().appleAppID = "6480345644"
+        AppsFlyerLib.shared().appleAppID = "6756777842"
         AppsFlyerLib.shared().isDebug = false
         AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
         AppsFlyerLib.shared().start()
