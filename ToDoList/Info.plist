@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>We use this data to understand app usage and improve your experience.</string>
+	<key>appsFlyerDevKeyTest</key>
+	<string>vEbzV4hdsUG5GpQYLeXsHT</string>
+	<key>appsFlyerDevKeyProd</key>
+	<string>vEbzV4hdsUG5GpQYLeXsHS</string>
+	<key>appleAppID</key>
+	<string>6756777842</string>
+</dict>
+</plist>

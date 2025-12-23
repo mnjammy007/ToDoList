@@ -5,6 +5,7 @@
 //  Created by Apple on 29/01/25.
 //
 
+import AppTrackingTransparency
 import AppsFlyerLib
 import SwiftUI
 
@@ -21,17 +22,24 @@ struct ToDoListApp: App {
     )
 
     init() {
-        AppsFlyerLib.shared().appsFlyerDevKey = "vEbzV4hdsUG5GpQYLeXsHS"
-        AppsFlyerLib.shared().appleAppID = "6756777842"
+        AppsFlyerLib.shared().appsFlyerDevKey = AppConfig.appsFlyerDevKeyProd
+        AppsFlyerLib.shared().appleAppID = AppConfig.appleAppID
         AppsFlyerLib.shared().isDebug = false
-        AppsFlyerLib.shared().waitForATTUserAuthorization(timeoutInterval: 60)
-        AppsFlyerLib.shared().start()
+        AppsFlyerLib.shared().isStopped = true
     }
 
     var body: some Scene {
         WindowGroup {
             TasksHomePage(viewModel: viewModel)
                 .preferredColorScheme(.light)
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                        ATTrackingManager.requestTrackingAuthorization { _ in
+                            AppsFlyerLib.shared().isStopped = false
+                            AppsFlyerLib.shared().start()
+                        }
+                    }
+                }
         }
     }
 }
